@@ -69,7 +69,7 @@ export default function Layout({ blockedNumbers }){
 
         fetchAPI(`api/insertNumbers`, data)
 
-        setPayment(amount);
+        setPayment(amount); 
     }
 
     function closeForm() {
