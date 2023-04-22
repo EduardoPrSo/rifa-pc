@@ -9,7 +9,7 @@ export default function Home({ unavailableNumbers }) {
 
 export const getServerSideProps = async () => {
 
-    const unavailableNumbers = await fetchAPI("/api/getNumbers")
+    const unavailableNumbers = await fetchAPI("api/getNumbers")
     const numbers = unavailableNumbers.numbers
 
     return {
