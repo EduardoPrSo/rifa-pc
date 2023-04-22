@@ -293,7 +293,7 @@ const ConfigItem = styled.div`
     border: 1px solid #000000cc;
     color: #000000cc;
     border-radius: 20px;
-    font-size: 4vw;
+    font-size: 3.5vw;
     
     @media screen and (min-width: 1024px) {
         font-size: .8vw;
