@@ -8,6 +8,7 @@ export default function Layout(){
     const [selectedNumbers, setSelectedNumbers] = useState([]);
     const [payment, setPayment] = useState(false);
     const [configPix, setConfigPix] = useState('');
+    const [pixKeyCopied, setPixKeyCopied] = useState(false);
 
     const numbers = [];
 
@@ -64,6 +65,12 @@ export default function Layout(){
         setPayment(false);
         setConfigPix('');
         setShowForm(false);
+        setPixKeyCopied(false);
+    }
+
+    const copyPixButton = {
+        color: pixKeyCopied ? 'yellowgreen' : 'black',
+        border: `1px solid ${pixKeyCopied ? 'yellowgreen' : '#000000cc'}`
     }
 
     return (
@@ -90,7 +97,7 @@ export default function Layout(){
                         amount={10}
                         onLoad={setConfigPix}
                     />
-                    <p className="inputPixKey" onClick={()=>navigator.clipboard.writeText(configPix)} readOnly>Clique para copiar a chave pix!</p>    
+                    <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(configPix);setPixKeyCopied(true)}} readOnly color={pixKeyCopied} style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>    
                 </>}
             </FormContainer>
             <h1>Rifinha do PC</h1>
@@ -159,6 +166,7 @@ const FormContainer = styled.form`
 
     h1 {
         margin-bottom: 30px;
+        font-size: 8vw;
     }
 
     h2 {
@@ -225,7 +233,8 @@ const FormContainer = styled.form`
         display: flex;
         align-items: center;
         height: 40px;
-        border: 1px solid #000000cc;
+        color: ${props => props.color ? 'yellowgreen' : 'black'};
+        border: 1px solid ${props => props.color ? 'yellowgreen' : '#000000cc'};
         border-radius: 20px;
         padding: 5px;
         font-size: 1.2rem;
