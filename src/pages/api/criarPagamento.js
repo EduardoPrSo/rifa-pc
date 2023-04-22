@@ -18,21 +18,21 @@ export default async function handler(req, res){
     });
 
     const response = await request.json();
-    console.log(response)
-    // const id = response.id;
-    // const qrCode = response.point_of_interaction.transaction_data.qr_code;
 
-    // fetch('https://api.mercadopago.com/v1/payments/'+id, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': 'Bearer TEST-893561390454146-041815-7774e232ec658dfad1dfc2eeff836173-1279349380',
-    //     },
-    //     body: JSON.stringify({
-    //         "capture": true,
-    //         "status": "approved",
-    //       })
-    // });
+    const id = response.id;
+    const qrCode = response.point_of_interaction.transaction_data.qr_code;
 
-    res.status(200).json({ message: 'success' })
+    fetch('https://api.mercadopago.com/v1/payments/'+id, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer TEST-893561390454146-041815-7774e232ec658dfad1dfc2eeff836173-1279349380',
+        },
+        body: JSON.stringify({
+            "capture": true,
+            "status": "approved",
+          })
+    });
+
+    res.status(200).json({ message: 'success', id, qrCode })
 }
