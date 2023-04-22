@@ -287,6 +287,9 @@ const ConfigDiv = styled.div`
 `
 
 const ConfigItem = styled.p`
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
     width: auto;
     display: flex;
     padding: 1% 2%;
