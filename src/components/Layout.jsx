@@ -288,7 +288,6 @@ const ConfigDiv = styled.div`
 
 const ConfigItem = styled.p`
     width: auto;
-    max-height: 3.5vh;
     display: flex;
     padding: 1% 2%;
     border: 1px solid #000000cc;
