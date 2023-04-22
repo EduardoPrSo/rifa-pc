@@ -1,10 +1,11 @@
 import styled from "styled-components"
 import { useState } from "react";
 import PIX from "react-qrcode-pix";
+import { fetchAPI } from "@/services/fetchAPI";
 
-export default function Layout(){
+export default function Layout({ blockedNumbers }){
     const [showForm, setShowForm] = useState(false);
-    const [unavailableNumbers, setUnavaliableNumbers] = useState([1, 2, 3, 4, 5]);
+    const [unavailableNumbers, setUnavaliableNumbers] = useState(blockedNumbers);
     const [selectedNumbers, setSelectedNumbers] = useState([]);
     const [payment, setPayment] = useState(false);
     const [configPix, setConfigPix] = useState('');
@@ -50,13 +51,23 @@ export default function Layout(){
     function buyButton() {
         if(selectedNumbers.length === 0) return;
         setShowForm(true);
-        console.log(selectedNumbers);
     }
     
     async function submitBuy(e) {
         e.preventDefault();
+        const name = e.target.name.value;
         const email = e.target.email.value;
+        const telephone = e.target.phone.value;
         const amount = selectedNumbers.length * 10;
+
+        const data = {
+            name,
+            email,
+            telephone,
+            numbers: selectedNumbers
+        }
+
+        fetchAPI(`api/insertNumbers`, data)
 
         setPayment(amount);
     }
@@ -66,6 +77,7 @@ export default function Layout(){
         setConfigPix('');
         setShowForm(false);
         setPixKeyCopied(false);
+        location.reload();
     }
 
     const copyPixButton = {
@@ -167,6 +179,10 @@ const FormContainer = styled.form`
     h1 {
         margin-bottom: 30px;
         font-size: 8vw;
+
+        @media screen and (min-width: 1024px) {
+            font-size: 1.5rem;
+        }
     }
 
     h2 {
