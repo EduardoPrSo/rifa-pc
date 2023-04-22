@@ -67,7 +67,7 @@ export default function Layout({ blockedNumbers }){
             numbers: selectedNumbers
         }
 
-        fetchAPI(`api/insertNumbers`, data)
+        await fetchAPI(`api/insertNumbers`, data)
 
         setPayment(amount);
     }
