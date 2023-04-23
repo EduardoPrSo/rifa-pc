@@ -5,7 +5,7 @@ export default async function handler(req, res){
 
     const { body } = req;
     
-    const notificationCode = body.notificationCode;
+    const notificationCode = body.notificationCode.replace('-', '');
 
     const request = await fetch(`https://ws.pagseguro.uol.com.br/v3/transactions/notifications/${notificationCode}?email=edup.s@hotmail.com&token=1379F92EA26C4E9BAC3DEBFDEE8E4310`, {
         method: 'GET',
