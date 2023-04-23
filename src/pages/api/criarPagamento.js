@@ -66,7 +66,7 @@ export default async function handler(req, res){
     const pixKey = response.qr_codes[0].text;
 
     try{
-        await conn.query(`INSET INTO payments (transaction_id) VALUES ('${id}')`)
+        await conn.query(`INSERT INTO payments (transaction_id) VALUES ('${id}')`)
     } catch (error) {
         console.log(error)
     } finally {
