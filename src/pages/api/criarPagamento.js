@@ -44,9 +44,9 @@ export default async function handler(req, res){
                     },
                 }
             ],
-            // "notification_urls": [
-            //     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webhook`
-            // ]
+            "notification_urls": [
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webhook`
+            ]
 
         })
     });
