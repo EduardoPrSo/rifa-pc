@@ -16,7 +16,8 @@ export default async function handler(req, res){
     });
 
     const response = await request.text();
-    const dom = new JSDOM(xmlText);
+    const dom = new JSDOM(response);
+    
     const reference = dom.window.document.getElementsByTagName('reference')[0].textContent;
     const status = dom.window.document.getElementsByTagName('status')[0].textContent;
 
