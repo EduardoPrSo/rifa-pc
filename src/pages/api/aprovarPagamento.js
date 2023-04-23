@@ -2,7 +2,7 @@ export default async function handler(req, res){
 
     const { body } = req;
 
-    const request = await fetch(`https://sandbox.api.pagseguro.com/orders/${body.id}/pay`, {
+    await fetch(`https://sandbox.api.pagseguro.com/orders/${body.id}/pay`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

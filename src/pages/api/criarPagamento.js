@@ -58,6 +58,8 @@ export default async function handler(req, res){
     const qrCode = response.qr_codes[0].links[0].href;
     const pixKey = response.qr_codes[0].text;
 
+    console.log(response)
+
     try{
         await conn.query(`INSERT INTO payments (reference, transaction_id) VALUES ('${reference}', '${id}')`)
     } catch (error) {
