@@ -1,56 +1,54 @@
 import { database } from "@/services/db"
 
+function generateCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+  
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      code += characters[randomIndex];
+    }
+  
+    code = code.substr(0, 3) + '-' + code.substr(3);
+    return code;
+}
+
 export default async function handler(req, res){
     const conn = await database();
+    const { body } = req;
 
-    const request = await fetch('https://sandbox.api.pagseguro.com/orders', {
+    if (req.headers.referer !== `${process.env.NEXT_PUBLIC_API_BASE_URL}/`) {
+        res.status(403).json({ message: 'Forbidden' });
+        return;
+    }
+
+    const request = await fetch(process.env.NEXT_PUBLIC_PAGSEGURO_CREATE_PAYMENT_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': '1379F92EA26C4E9BAC3DEBFDEE8E4310',
+            'Authorization': process.env.NEXT_PUBLIC_PAGSEGURO_TOKEN,
         },
         body: JSON.stringify({
-            "reference_id": "ex-00001",
+            "reference_id": generateCode(),
             "customer": {
-                "name": "Jose da Silva",
-                "email": "email@test.com",
-                "tax_id": "12345678909",
-                "phones": [
-                    {
-                        "country": "55",
-                        "area": "11",
-                        "number": "999999999",
-                        "type": "MOBILE"
-                    }
-                ]
+                "name": body.name,
+                "email": body.email,
+                "tax_id": body.cpf,
             },
             "items": [
                 {
-                    "name": "nome do item",
-                    "quantity": 1,
-                    "unit_amount": 100
+                    "name": "Números",
+                    "quantity": body.numbers.length,
+                    "unit_amount": 10
                 }
             ],
             "qr_codes": [
                 {
                     "amount": {
-                        "value": 500
+                        "value": body.amount * 100
                     },
-                    "expiration_date": "2023-08-29T20:15:59-03:00",
                 }
             ],
-            "shipping": {
-                "address": {
-                    "street": "Avenida Brigadeiro Faria Lima",
-                    "number": "1384",
-                    "complement": "apto 12",
-                    "locality": "Pinheiros",
-                    "city": "São Paulo",
-                    "region_code": "SP",
-                    "country": "BRA",
-                    "postal_code": "01452002"
-                }
-            },
             "notification_urls": [
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webhook}`
             ]
@@ -61,16 +59,17 @@ export default async function handler(req, res){
     const response = await request.json();
 
     const id = response.id;
+    const reference = response.reference_id;
     const qrCode = response.qr_codes[0].links[0].href;
     const pixKey = response.qr_codes[0].text;
 
     try{
-        await conn.query(`INSERT INTO payments (transaction_id) VALUES ('${id}')`)
+        await conn.query(`INSERT INTO payments (reference, transaction_id) VALUES ('${reference}', '${id}')`)
     } catch (error) {
         console.log(error)
     } finally {
         conn.end();
     }
 
-    res.status(200).json({ message: 'success' })
+    res.status(200).json({ qrCode, pixKey })
 }

@@ -8,7 +8,7 @@ export default async function handler(req, res){
     
     const notificationCode = body.notificationCode;
 
-    const request = await fetch(`https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/${notificationCode}?email=edup.s@hotmail.com&token=1379F92EA26C4E9BAC3DEBFDEE8E4310`, {
+    const request = await fetch(`${process.env.NEXT_PUBLIC_WEBHOOK_URL}/${notificationCode}?email=${process.env.NEXT_PUBLIC_PAGSEGURO_EMAIL}&token=${process.env.NEXT_PUBLIC_PAGSEGURO_TOKEN}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/xml',
@@ -21,7 +21,18 @@ export default async function handler(req, res){
     const reference = dom.window.document.getElementsByTagName('reference')[0].textContent;
     const status = dom.window.document.getElementsByTagName('status')[0].textContent;
 
-    console.log(reference, status)
+    if (status !== '3') {
+        res.status(200).json({ message: 'success' })
+        return;
+    }
+
+    try {
+        await conn.query(`UPDATE payments SET status = 1 WHERE reference = ?`, [reference]);
+    } catch(err) {
+        console.log(err);
+    } finally {
+        await conn.end();
+    }
 
     res.status(200).json({ message: 'success' })
 }

@@ -15,9 +15,14 @@ export default async function handler(req, res) {
     const conn = await database();
     const { body } = req;
 
+    if (req.headers.referer !== `${process.env.NEXT_PUBLIC_API_BASE_URL}/`) {
+        res.status(403).json({ message: 'Forbidden' });
+        return;
+    }
+
     try {
         body.numbers.map(async (number) => {
-            await conn.query(`INSERT INTO numbers (number, name, email, telephone) VALUES ('${number}', '${body.name}', '${body.email}', '${body.telephone}')`)
+            await conn.query(`INSERT INTO numbers (number, name, email, cpf) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}')`)
         })
 
         await sendMail({        
@@ -38,9 +43,8 @@ export default async function handler(req, res) {
                 <h2>Dados:</h2>
                 <p>Nome: ${body.name}</p>
                 <p>Email: ${body.email}</p>
-                <p>Telefone: ${body.telephone}</p>
+                <p>CPF: ${body.cpf}</p>
                 <p>Números: ${extractNumbers(body.numbers)}</p>
-                <p>Verifique se o pagamento foi aprovado</p>
             `,
         });
 

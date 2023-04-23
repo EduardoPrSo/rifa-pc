@@ -11,10 +11,10 @@ export default async function handler(req, res){
         body: JSON.stringify({
             "charges": [
                 {
-                    "reference_id": "ex-00001",
+                    "reference_id": body.reference,
                     "description": "descricao do pagamento",
                     "amount": {
-                        "value": 100,
+                        "value": body.value,
                         "currency": "BRL"
                     },
                     "payment_method": {

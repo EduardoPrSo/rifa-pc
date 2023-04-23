@@ -8,7 +8,8 @@ export default function Layout({ blockedNumbers }){
     const [unavailableNumbers, setUnavaliableNumbers] = useState(blockedNumbers);
     const [selectedNumbers, setSelectedNumbers] = useState([]);
     const [payment, setPayment] = useState(false);
-    const [configPix, setConfigPix] = useState('');
+    const [pixKey, setPixKey] = useState('');
+    const [pixImg, setPixImg] = useState('');
     const [pixKeyCopied, setPixKeyCopied] = useState(false);
 
     const numbers = [];
@@ -57,24 +58,30 @@ export default function Layout({ blockedNumbers }){
         e.preventDefault();
         const name = e.target.name.value;
         const email = e.target.email.value;
-        const telephone = e.target.phone.value;
+        const cpf = e.target.cpf.value.replace('.', '').replace('.', '').replace('-', '');
         const amount = selectedNumbers.length * 10;
 
         const data = {
             name,
             email,
-            telephone,
-            numbers: selectedNumbers
+            cpf,
+            numbers: selectedNumbers,
+            amount,
         }
 
+        const qrCodeData = await fetchAPI(`api/criarPagamento`, data)
+
+        setPixKey(qrCodeData.pixKey);
+        setPixImg(qrCodeData.qrCode);
         await fetchAPI(`api/insertNumbers`, data)
 
-        setPayment(amount);
+        setPayment(true);
     }
 
     function closeForm() {
         setPayment(false);
-        setConfigPix('');
+        setPixKey('');
+        setPixImg('');
         setShowForm(false);
         setPixKeyCopied(false);
         location.reload();
@@ -94,7 +101,7 @@ export default function Layout({ blockedNumbers }){
                     <h4 className="closeButton" onClick={closeForm}>x</h4>
                     <input type="text" id="name" name="name" placeholder="Digite seu nome" required />
                     <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required />
-                    <input type="text" id="phone" name="phone" placeholder="Digite seu telefone" required />
+                    <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" required />
                     <button className="buyButton">COMPRAR</button>
                 </>
                     : 
@@ -102,14 +109,8 @@ export default function Layout({ blockedNumbers }){
                 <>
                     <h4 className="closeButton" onClick={closeForm}>x</h4>
                     <h1>Faça seu pagamento</h1>
-                    <PIX
-                        pixkey='edup.s@hotmail.com'
-                        merchant='Eduardo Soupinski'
-                        city='Curitiba'
-                        amount={10}
-                        onLoad={setConfigPix}
-                    />
-                    <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(configPix);setPixKeyCopied(true)}} readOnly color={pixKeyCopied} style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>    
+                    <img src={pixImg} />
+                    <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(pixKey);setPixKeyCopied(true)}} readOnly color={pixKeyCopied} style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>    
                 </>}
             </FormContainer>
             <h1>Rifinha do PC</h1>
@@ -258,6 +259,11 @@ const FormContainer = styled.form`
         padding: 0 15px;
         margin-top: 10px;
         cursor: pointer
+    }
+
+    img{
+        width: 60%;
+        height: auto;
     }
 `
 
