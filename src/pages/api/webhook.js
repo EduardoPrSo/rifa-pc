@@ -7,8 +7,8 @@ export default async function handler(req, res){
     const { body } = req;
     
     const notificationCode = body.notificationCode;
-    const apiURL = `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/${notificationCode}?email=${process.env.NEXT_PUBLIC_PAGSEGURO_EMAIL}&token=${process.env.NEXT_PUBLIC_PAGSEGURO_TOKEN}`
-    console.log(apiURL)
+    const apiURL = `${process.env.NEXT_PAGSEGURO_PUBLIC_WEBHOOK_URL}/${notificationCode}?email=${process.env.NEXT_PUBLIC_PAGSEGURO_EMAIL}&token=${process.env.NEXT_PUBLIC_PAGSEGURO_TOKEN}`
+    console.log(notificationCode)
 
     const request = await fetch(apiURL, {
         method: 'GET',
