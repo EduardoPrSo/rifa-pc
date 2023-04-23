@@ -6,7 +6,7 @@ export default async function handler(req, res){
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': '1379F92EA26C4E9BAC3DEBFDEE8E4310',
+            'Authorization': process.env.NEXT_PUBLIC_PAGSEGURO_TOKEN,
         },
         body: JSON.stringify({
             "charges": [
