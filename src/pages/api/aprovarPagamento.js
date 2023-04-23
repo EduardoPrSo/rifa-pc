@@ -11,7 +11,7 @@ export default async function handler(req, res){
         body: JSON.stringify({
             "charges": [
                 {
-                    "reference_id": "referencia do pagamento",
+                    "reference_id": body.reference,
                     "description": "descricao do pagamento",
                     "amount": {
                         "value": 500,
