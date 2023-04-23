@@ -51,7 +51,6 @@ export default async function handler(req, res){
                     "postal_code": "01452002"
                 }
             },
-
             "notification_urls": [
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webhook}`
             ]

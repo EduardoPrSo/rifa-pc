@@ -13,6 +13,7 @@ export default async function handler(req, res){
         method: 'GET',
         headers: {
             'Content-Type': 'application/xml',
+            'Authorization': '1379F92EA26C4E9BAC3DEBFDEE8E4310',
         }
     });
 
