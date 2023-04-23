@@ -1,18 +1,44 @@
 export default async function handler(req, res){
 
-    const request = await fetch('https://api.mercadopago.com/v1/payments', {
+    const { body } = req;
+
+    const request = await fetch(`https://sandbox.api.pagseguro.com/orders/${body.id}/pay`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer TEST-893561390454146-041815-7774e232ec658dfad1dfc2eeff836173-1279349380',
+            'Authorization': '1379F92EA26C4E9BAC3DEBFDEE8E4310',
         },
         body: JSON.stringify({
-            "capture": true,
-            "status": "approved",
-          })
+            "charges": [
+                {
+                    "reference_id": "referencia do pagamento",
+                    "description": "descricao do pagamento",
+                    "amount": {
+                        "value": 100,
+                        "currency": "BRL"
+                    },
+                    "payment_method": {
+                        "type": "CREDIT_CARD",
+                        "installments": 1,
+                        "capture": true,
+                        "card": {
+                            "number": "4111111111111111",
+                            "exp_month": "12",
+                            "exp_year": "2026",
+                            "security_code": "123",
+                            "holder": {
+                                "name": "Jose da Silva"
+                            },
+                            "store": false
+                        }
+                    },
+                    "metadata": {
+                        "Key": "value"
+                    },
+                }
+            ]
+        })
     });
 
-    const response = await request.json();
-
-    res.status(200).json({ message: 'success', response })
+    res.status(200).json({ message: 'success' })
 }
