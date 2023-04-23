@@ -8,10 +8,10 @@ export default async function handler(req, res){
     
     const notificationCode = body.notificationCode;
 
-    console.log(notificationCode)
-
     sdk.consultaPeloCDigoDeNotificacao({email: 'edup.s@hotmail.com', token: '1379F92EA26C4E9BAC3DEBFDEE8E4310', notificationcode: notificationCode})
-      .then(({ data }) => console.log(data))
+      .then(({ data }) => {
+        console.log('data: ', data)
+    })
       .catch(err => console.error(err));
 
     res.status(200).json({ message: 'success' })
