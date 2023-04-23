@@ -11,10 +11,10 @@ export default async function handler(req, res){
         body: JSON.stringify({
             "charges": [
                 {
-                    "reference_id": body.reference,
+                    "reference_id": "referencia do pagamento",
                     "description": "descricao do pagamento",
                     "amount": {
-                        "value": body.value,
+                        "value": 500,
                         "currency": "BRL"
                     },
                     "payment_method": {
@@ -35,6 +35,9 @@ export default async function handler(req, res){
                     "metadata": {
                         "Key": "value"
                     },
+                    "notification_urls": [
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/webhook`
+                    ]
                 }
             ]
         })
