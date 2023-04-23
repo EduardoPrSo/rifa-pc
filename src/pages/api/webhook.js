@@ -1,4 +1,3 @@
-const sdk = require('api')('@devpagseguro/v1.0#c6eeq1pl0qo9ub0');
 import { database } from "@/services/db"
 
 export default async function handler(req, res){
@@ -8,11 +7,17 @@ export default async function handler(req, res){
     
     const notificationCode = body.notificationCode;
 
-    sdk.consultaPeloCDigoDeNotificacao({email: 'edup.s@hotmail.com', token: '1379F92EA26C4E9BAC3DEBFDEE8E4310', notificationcode: notificationCode})
-      .then(({ data }) => {
-        console.log('data: ', data)
-    })
-      .catch(err => console.error(err));
+    console.log(notificationCode)
+
+    const request = await fetch(`https://ws.sandbox.pagseguro.uol.com.br/pre-approvals/notifications/${notificationCode}?email=edup.s@hotmail.com&token=1379F92EA26C4E9BAC3DEBFDEE8E4310`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/xml',
+        }
+    });
+
+    const response = await request.text();
+    console.log(response)
 
     res.status(200).json({ message: 'success' })
 }
