@@ -5,7 +5,7 @@ export default async function handler(req, res){
 
     const { body } = req;
     
-    console.log(body);
+    console.log(body.notificationCode);
     // const id = body.id;
     // const status = body.charges[0].status;
 
