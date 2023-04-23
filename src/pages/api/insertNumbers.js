@@ -15,11 +15,6 @@ export default async function handler(req, res) {
     const conn = await database();
     const { body } = req;
 
-    if (req.headers.referer !== `${process.env.NEXT_PUBLIC_API_BASE_URL}/`) {
-        res.status(403).json({ message: 'Forbidden' });
-        return;
-    }
-
     try {
         body.numbers.map(async (number) => {
             await conn.query(`INSERT INTO numbers (number, name, email, cpf) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}')`)
