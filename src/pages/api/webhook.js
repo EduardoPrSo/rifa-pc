@@ -5,19 +5,17 @@ export default async function handler(req, res){
 
     const { body } = req;
     
-    console.log(body.notificationCode);
-    // const id = body.id;
-    // const status = body.charges[0].status;
+    const notificationCode = body.notificationCode;
 
-    // if(status === 'PAID'){
-    //     try {
-    //         await conn.query(`UPDATE payments SET status = 1 WHERE transaction_id = ${id}`)
-    //     } catch(err) {
-    //         console.log(err);
-    //     } finally {
-    //         await conn.end();
-    //     }
-    // }
+    const request = await fetch(`https://ws.pagseguro.uol.com.br/v3/transactions/notifications/${notificationCode}?email=edup.s@hotmail.com&token=1379F92EA26C4E9BAC3DEBFDEE8E4310`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const response = await request.json();
+    console.log(response)
 
     res.status(200).json({ message: 'success' })
 }
