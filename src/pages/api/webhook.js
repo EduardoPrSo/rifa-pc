@@ -5,18 +5,19 @@ export default async function handler(req, res){
 
     const { body } = req;
     
-    const id = body.id;
-    const status = body.charges[0].status;
+    console.log(body);
+    // const id = body.id;
+    // const status = body.charges[0].status;
 
-    if(status === 'PAID'){
-        try {
-            await conn.query(`UPDATE payments SET status = 1 WHERE transaction_id = ${id}`)
-        } catch(err) {
-            console.log(err);
-        } finally {
-            await conn.end();
-        }
-    }
+    // if(status === 'PAID'){
+    //     try {
+    //         await conn.query(`UPDATE payments SET status = 1 WHERE transaction_id = ${id}`)
+    //     } catch(err) {
+    //         console.log(err);
+    //     } finally {
+    //         await conn.end();
+    //     }
+    // }
 
     res.status(200).json({ message: 'success' })
 }
