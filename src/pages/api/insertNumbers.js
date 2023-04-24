@@ -15,9 +15,11 @@ export default async function handler(req, res) {
     const conn = await database();
     const { body } = req;
 
+    const currentTime = Math.floor(Date.now() / 1000);
+
     try {
         body.numbers.map(async (number) => {
-            await conn.query(`INSERT INTO numbers (number, name, email, cpf) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}')`)
+            await conn.query(`INSERT INTO numbers (number, name, email, cpf, reference, created_at) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}', '${body.reference}', '${currentTime}')`)
         })
 
         // await sendMail({        

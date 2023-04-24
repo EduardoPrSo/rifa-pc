@@ -17,6 +17,7 @@ export default async function handler(req, res){
 
     try {
         await conn.query(`UPDATE payments SET status = '1' WHERE reference = '${reference_id}' AND transaction_id = '${id}'`);
+        await conn.query(`UPDATE numbers SET status = '1' WHERE reference = '${reference_id}'`);
     } catch(err) {
         console.log(err);
     } finally {

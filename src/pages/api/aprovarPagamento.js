@@ -1,5 +1,4 @@
 export default async function handler(req, res){
-
     const { body } = req;
 
     await fetch(`https://sandbox.api.pagseguro.com/orders/${body.id}/pay`, {

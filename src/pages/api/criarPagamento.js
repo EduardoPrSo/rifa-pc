@@ -5,8 +5,8 @@ function generateCode() {
     let code = '';
   
     for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      code += characters[randomIndex];
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters[randomIndex];
     }
   
     code = code.substr(0, 3) + '-' + code.substr(3);
@@ -58,8 +58,6 @@ export default async function handler(req, res){
     const qrCode = response.qr_codes[0].links[0].href;
     const pixKey = response.qr_codes[0].text;
 
-    console.log(response)
-
     try{
         await conn.query(`INSERT INTO payments (reference, transaction_id) VALUES ('${reference}', '${id}')`)
     } catch (error) {
@@ -68,5 +66,5 @@ export default async function handler(req, res){
         conn.end();
     }
 
-    res.status(200).json({ qrCode, pixKey })
+    res.status(200).json({ qrCode, pixKey, reference })
 }

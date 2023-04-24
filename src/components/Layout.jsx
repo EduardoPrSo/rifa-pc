@@ -56,6 +56,7 @@ export default function Layout({ blockedNumbers }){
     
     async function submitBuy(e) {
         e.preventDefault();
+
         const name = e.target.name.value;
         const email = e.target.email.value;
         const cpf = e.target.cpf.value.replace('.', '').replace('.', '').replace('-', '');
@@ -70,6 +71,7 @@ export default function Layout({ blockedNumbers }){
         }
 
         const qrCodeData = await fetchAPI(`api/criarPagamento`, data)
+        data['reference'] = qrCodeData.reference
 
         setPixKey(qrCodeData.pixKey);
         setPixImg(qrCodeData.qrCode);
