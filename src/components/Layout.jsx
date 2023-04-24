@@ -75,7 +75,7 @@ export default function Layout({ blockedNumbers }){
             amount,
         }
 
-        const qrCodeData = await fetchAPI(`api/criarPagamento`, data)
+        const qrCodeData = await fetchAPI(`api/createPayment`, data)
         data['reference'] = qrCodeData.reference
 
         setPixKey(qrCodeData.pixKey);
@@ -343,7 +343,7 @@ const ConfigDiv = styled.div`
     flex-wrap: wrap;
     gap: 10px;
     width: 100%;
-    height: auto;
+    height: 100%;
     padding: 2%;
     align-items: center;
     justify-content: center;
