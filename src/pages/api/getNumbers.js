@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         const numbersData = getNumbers[0];
         numbersData.forEach(async (item) => {
             if (item.created_at + 1800 < Math.floor(Date.now() / 1000)) {
-                await conn.query(`DELETE FROM numbers WHERE number = '${item.number}`)
+                await conn.query(`DELETE FROM numbers WHERE number = '${item.number}'`)
             }
         });
 
