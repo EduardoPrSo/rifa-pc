@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
     try {
         body.numbers.map(async (number) => {
-            await conn.query(`INSERT INTO numbers (number, name, email, cpf, reference, created_at) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}', '${body.reference}', '${currentTime}')`)
+            await conn.query(`INSERT INTO numbers (number, name, email, cpf, tel, reference, created_at) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}', '${body.tel}', '${body.reference}', '${currentTime}')`)
         })
 
         // await sendMail({        
@@ -29,7 +29,6 @@ export default async function handler(req, res) {
         //         <h1>Olá, ${body.name}!</h1>
         //         <p>Seu pedido foi realizado com sucesso e seus números são: ${extractNumbers(body.numbers)}</p>
         //         <p>Em breve entraremos em contato para confirmar o pagamento!</p>
-        //         <p>Muito obrigado por comprar seus números e boa sorte!</p>
         //     `,
         // });
 

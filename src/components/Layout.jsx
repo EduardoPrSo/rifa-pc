@@ -1,12 +1,11 @@
 import styled from "styled-components"
 import { useState } from "react";
-import PIX from "react-qrcode-pix";
+import { InfinitySpin } from 'react-loader-spinner'
 import { fetchAPI } from "@/services/fetchAPI";
 
 export default function Layout({ blockedNumbers }){
     const [unavailableNumbers] = useState(blockedNumbers.numbers);
     const [payedNumbers] = useState(blockedNumbers.payedNumbers)
-    const [nonPayedNumbers] = useState(blockedNumbers.nonPayedNumbers)
     
     const [showForm, setShowForm] = useState(false);
     const [selectedNumbers, setSelectedNumbers] = useState([]);
@@ -14,6 +13,7 @@ export default function Layout({ blockedNumbers }){
     const [pixKey, setPixKey] = useState('');
     const [pixImg, setPixImg] = useState('');
     const [pixKeyCopied, setPixKeyCopied] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const numbers = [];
 
@@ -59,16 +59,18 @@ export default function Layout({ blockedNumbers }){
     
     async function submitBuy(e) {
         e.preventDefault();
-
+        setLoading(true);
         const name = e.target.name.value;
         const email = e.target.email.value;
-        const cpf = e.target.cpf.value.replace('.', '').replace('.', '').replace('-', '');
+        const cpf = e.target.cpf.value;
+        const tel = e.target.tel.value;
         const amount = selectedNumbers.length * 10;
 
         const data = {
             name,
             email,
             cpf,
+            tel,
             numbers: selectedNumbers,
             amount,
         }
@@ -81,6 +83,7 @@ export default function Layout({ blockedNumbers }){
         await fetchAPI(`api/insertNumbers`, data)
 
         setPayment(true);
+        setLoading(false);
     }
 
     function closeForm() {
@@ -89,7 +92,9 @@ export default function Layout({ blockedNumbers }){
         setPixImg('');
         setShowForm(false);
         setPixKeyCopied(false);
-        location.reload();
+        if (payment) {
+            location.reload();
+        }
     }
 
     const copyPixButton = {
@@ -102,20 +107,33 @@ export default function Layout({ blockedNumbers }){
             <FormContainer display={showForm ? 'flex' : 'none'} onSubmit={(e)=>submitBuy(e)}>
                 {!payment ? 
                 <>
-                    <h1>Formulário de compra</h1>
-                    <h4 className="closeButton" onClick={closeForm}>x</h4>
-                    <input type="text" id="name" name="name" placeholder="Digite seu nome" required />
-                    <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required />
-                    <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" required />
-                    <button className="buyButton">COMPRAR</button>
+                    {!loading ? 
+                    <>
+                        <h1>Formulário de compra</h1>
+                        <h4 className="closeButton" onClick={closeForm}>x</h4>
+                        <input type="text" id="name" name="name" placeholder="Digite seu nome" required />
+                        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required />
+                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" required onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]+/g, '')}} />
+                        <input type="text" id="tel" name="tel" placeholder="Digite seu telefone" required onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]+/g, '')}} />
+                        <p>O seu total é <span className="spanPrice">R${selectedNumbers.length * 10},00</span></p>
+                        <button className="buyButton">COMPRAR</button>
+                    </> : 
+                    <>
+                        <h1>Aguarde...</h1>  
+                        <InfinitySpin 
+                            width='200'
+                            color="#000000b0"
+                        />
+                    </>}
                 </>
                     : 
                     
                 <>
                     <h4 className="closeButton" onClick={closeForm}>x</h4>
-                    <h1>Faça seu pagamento</h1>
+                    <h1>Faça seu pagamento!</h1>
                     <img src={pixImg} />
-                    <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(pixKey);setPixKeyCopied(true)}} readOnly color={pixKeyCopied} style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>    
+                    <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(pixKey);setPixKeyCopied(true)}} readOnly style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>  
+                    <p className="paymentObs">Se o pagamento não for realizado em 10 minutos os números voltam para a lista!</p>  
                 </>}
             </FormContainer>
             <h1>Rifinha do PC</h1>
@@ -130,7 +148,7 @@ export default function Layout({ blockedNumbers }){
                     </ConfigDiv>
                 </DescriptionContainer>
                 <Numbersdiv>
-                    <p>Selecione os números que deseja comprar!</p>
+                    <p>Cada número custa R$10,00</p>
                     <NumbersContainer>
                         {numbers.map((number) => {
                             return number
@@ -178,7 +196,7 @@ const FormContainer = styled.form`
     gap: 10px;
     width: 95%;
     height: auto;
-    padding: 5%;
+    padding: 3%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
 
@@ -269,6 +287,17 @@ const FormContainer = styled.form`
     img{
         width: 60%;
         height: auto;
+    }
+
+    .paymentObs{
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .spanPrice{
+        text-decoration: none;
+        color: black;
+        font-weight: 600;
     }
 `
 
