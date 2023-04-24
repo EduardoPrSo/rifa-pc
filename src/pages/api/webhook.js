@@ -18,6 +18,8 @@ export default async function handler(req, res){
     try {
         await conn.query(`UPDATE payments SET status = '1' WHERE reference = '${reference_id}' AND transaction_id = '${id}'`);
         await conn.query(`UPDATE numbers SET status = '1' WHERE reference = '${reference_id}'`);
+        const email = await conn.query(`SELECT rmail FROM numbers WHERE reference = '${reference_id}'`)
+        console.log(email[0][0].email)
     } catch(err) {
         console.log(err);
     } finally {

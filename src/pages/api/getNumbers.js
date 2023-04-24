@@ -13,13 +13,11 @@ function getNumbersFromArray(array) {
 export default async function handler(req, res) {
     const conn = await database();
 
-    console.log(req.connection.remoteAddress)
-
     try {
         const getNumbers = await conn.query(`SELECT number, created_at, reference FROM numbers WHERE status = '0'`)
         const numbersData = getNumbers[0];
         numbersData.forEach(async (item) => {
-            if (item.created_at + 20 < Math.floor(Date.now() / 1000)) { //600
+            if (item.created_at + 600 < Math.floor(Date.now() / 1000)) {
                 await conn.query(`DELETE FROM numbers WHERE number = '${item.number}'`)
                 await conn.query(`DELETE FROM payments WHERE reference = '${item.reference}'`)
             }

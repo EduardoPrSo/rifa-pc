@@ -22,27 +22,15 @@ export default async function handler(req, res) {
             await conn.query(`INSERT INTO numbers (number, name, email, cpf, tel, reference, created_at) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}', '${body.tel}', '${body.reference}', '${currentTime}')`)
         })
 
-        // await sendMail({        
-        //     to: body.email,
-        //     subject: 'Muito obrigado por comprar!',
-        //     html: `
-        //         <h1>Olá, ${body.name}!</h1>
-        //         <p>Seu pedido foi realizado com sucesso e seus números são: ${extractNumbers(body.numbers)}</p>
-        //         <p>Em breve entraremos em contato para confirmar o pagamento!</p>
-        //     `,
-        // });
-
-        // await sendMail({        
-        //     to: 'edup.s@hotmail.com',
-        //     subject: 'Nova compra de rifa',
-        //     html: `
-        //         <h2>Dados:</h2>
-        //         <p>Nome: ${body.name}</p>
-        //         <p>Email: ${body.email}</p>
-        //         <p>CPF: ${body.cpf}</p>
-        //         <p>Números: ${extractNumbers(body.numbers)}</p>
-        //     `,
-        // });
+        await sendMail({        
+            to: body.email,
+            subject: 'Muito obrigado por comprar!',
+            html: `
+                <h1>Olá, ${body.name}!</h1>
+                <p>Seu pedido foi realizado com sucesso e seus números são: ${extractNumbers(body.numbers)}</p>
+                <p>Em breve entraremos em contato para confirmar o pagamento!</p>
+            `,
+        });
 
         res.status(200).json({ message: 'success' })
     } catch(err) {

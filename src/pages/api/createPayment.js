@@ -40,7 +40,7 @@ export default async function handler(req, res){
             "qr_codes": [
                 {
                     "amount": {
-                        "value": body.amount * 100
+                        "value": (body.numbers.length*10) * 100
                     },
                 }
             ],

@@ -64,7 +64,6 @@ export default function Layout({ blockedNumbers }){
         const email = e.target.email.value;
         const cpf = e.target.cpf.value;
         const tel = e.target.tel.value;
-        const amount = selectedNumbers.length * 10;
 
         const data = {
             name,
@@ -72,7 +71,6 @@ export default function Layout({ blockedNumbers }){
             cpf,
             tel,
             numbers: selectedNumbers,
-            amount,
         }
 
         const qrCodeData = await fetchAPI(`api/createPayment`, data)
