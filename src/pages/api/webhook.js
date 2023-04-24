@@ -6,18 +6,24 @@ export default async function handler(req, res){
 
     const { body } = req;
     
-    if (body.charges.status !== 'PAID') {
-        res.status(200).json({ message: 'success' })
-        return;
-    }
+    const id = body.id;
+    const reference_id = body.reference_id;
+    const status = body.charges.status;
 
-    try {
-        await conn.query(`UPDATE payments SET status = '1' WHERE reference = '${body.reference_id}' AND transaction_id = '${body.id}'`);
-    } catch(err) {
-        console.log(err);
-    } finally {
-        await conn.end();
-    }
+    console.log(id, reference_id, status)
+
+    // if (body.charges.status !== 'PAID') {
+    //     res.status(200).json({ message: 'success' })
+    //     return;
+    // }
+
+    // try {
+    //     await conn.query(`UPDATE payments SET status = '1' WHERE reference = '${body.reference_id}' AND transaction_id = '${body.id}'`);
+    // } catch(err) {
+    //     console.log(err);
+    // } finally {
+    //     await conn.end();
+    // }
 
     res.status(200).json({ message: 'success' })
 
