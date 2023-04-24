@@ -8,7 +8,7 @@ export default async function handler(req, res){
     
     const id = body.id;
     const reference_id = body.reference_id;
-    const status = body.charges.status;
+    const status = body;
 
     console.log(id, reference_id, status)
 
