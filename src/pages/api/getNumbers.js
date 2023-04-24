@@ -21,8 +21,15 @@ export default async function handler(req, res) {
                 await conn.query(`DELETE FROM numbers WHERE number = '${item.number}`)
             }
         });
-        const numbers = await conn.query(`SELECT number FROM numbers`)
-        res.status(200).json({ numbers: getNumbersFromArray(numbers[0]) })
+
+        let payedNumbers = await conn.query("SELECT number FROM numbers WHERE status = '1'")
+        let nonPayedNumbers = await conn.query("SELECT number FROM numbers WHERE status = '0'")
+
+        payedNumbers = getNumbersFromArray(payedNumbers[0])
+        nonPayedNumbers = getNumbersFromArray(nonPayedNumbers[0])
+        const numbers = payedNumbers.concat(nonPayedNumbers)
+
+        res.status(200).json({ numbers, payedNumbers, nonPayedNumbers })
         return
     } catch(err) {
         console.log(err);

@@ -4,8 +4,11 @@ import PIX from "react-qrcode-pix";
 import { fetchAPI } from "@/services/fetchAPI";
 
 export default function Layout({ blockedNumbers }){
+    const [unavailableNumbers] = useState(blockedNumbers.numbers);
+    const [payedNumbers] = useState(blockedNumbers.payedNumbers)
+    const [nonPayedNumbers] = useState(blockedNumbers.nonPayedNumbers)
+    
     const [showForm, setShowForm] = useState(false);
-    const [unavailableNumbers, setUnavaliableNumbers] = useState(blockedNumbers);
     const [selectedNumbers, setSelectedNumbers] = useState([]);
     const [payment, setPayment] = useState(false);
     const [pixKey, setPixKey] = useState('');
@@ -32,8 +35,8 @@ export default function Layout({ blockedNumbers }){
                 key={i} 
                 onClick={()=>selectNumber(i)} 
                 style={{
-                    color: unavailableNumbers.includes(i) ? 'red' : selectedNumbers.includes(i) ? 'orange' : 'yellowgreen', 
-                    border: unavailableNumbers.includes(i) ? '1.5px solid red' : `1.5px solid ${selectedNumbers.includes(i) ? 'orange' : 'yellowgreen'}`
+                    color: unavailableNumbers.includes(i) ? payedNumbers.includes(i) ? 'red' : 'orange' : selectedNumbers.includes(i) ? '#45b6fe' : 'yellowgreen', 
+                    border: unavailableNumbers.includes(i) ? payedNumbers.includes(i) ? '1.5px solid red' : '1.5px solid orange' : `1.5px solid ${selectedNumbers.includes(i) ? '#45b6fe' : 'yellowgreen'}`
                 }}>{i}
             </Number>
         );
