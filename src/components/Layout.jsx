@@ -117,7 +117,8 @@ export default function Layout({ blockedNumbers }){
                         <input type="text" id="tel" name="tel" placeholder="Digite seu telefone" required onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]+/g, '')}} />
                         <p>O seu total é <span className="spanPrice">R${selectedNumbers.length * 10},00</span></p>
                         <button className="buyButton">COMPRAR</button>
-                    </> : 
+                    </> 
+                        : 
                     <>
                         <h1>Aguarde...</h1>  
                         <InfinitySpin 
@@ -127,7 +128,6 @@ export default function Layout({ blockedNumbers }){
                     </>}
                 </>
                     : 
-                    
                 <>
                     <h4 className="closeButton" onClick={closeForm}>x</h4>
                     <h1>Faça seu pagamento!</h1>

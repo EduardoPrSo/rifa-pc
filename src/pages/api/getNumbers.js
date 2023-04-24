@@ -13,6 +13,8 @@ function getNumbersFromArray(array) {
 export default async function handler(req, res) {
     const conn = await database();
 
+    console.log(req.connection.remoteAddress)
+
     try {
         const getNumbers = await conn.query(`SELECT number, created_at, reference FROM numbers WHERE status = '0'`)
         const numbersData = getNumbers[0];
