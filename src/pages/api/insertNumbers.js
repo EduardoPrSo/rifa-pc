@@ -1,4 +1,3 @@
-import { sendMail } from "@/services/sendMail";
 import { database } from "@/services/db"
 
 function extractNumbers(array){
@@ -21,16 +20,6 @@ export default async function handler(req, res) {
         body.numbers.map(async (number) => {
             await conn.query(`INSERT INTO numbers (number, name, email, cpf, tel, reference, created_at) VALUES ('${number}', '${body.name}', '${body.email}', '${body.cpf}', '${body.tel}', '${body.reference}', '${currentTime}')`)
         })
-
-        await sendMail({        
-            to: body.email,
-            subject: 'Muito obrigado por comprar!',
-            html: `
-                <h1>Olá, ${body.name}!</h1>
-                <p>Seu pedido foi realizado com sucesso e seus números são: ${extractNumbers(body.numbers)}</p>
-                <p>Em breve entraremos em contato para confirmar o pagamento!</p>
-            `,
-        });
 
         res.status(200).json({ message: 'success' })
     } catch(err) {
