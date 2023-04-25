@@ -86,11 +86,11 @@ export default function Layout({ blockedNumbers }){
 
         setPixKey(qrCodeData.pixKey);
         setPixImg(qrCodeData.qrCode);
+        setWaitingPayment(true);
         await fetchAPI(`api/insertNumbers`, data)
 
         setPayment(true);
         setLoading(false);
-        setWaitingPayment(true);
 
         const checkPayment = setInterval(async () => {
             console.log(waitingPayment)
