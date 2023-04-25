@@ -16,7 +16,6 @@ export default function Layout({ blockedNumbers }){
     const [pixImg, setPixImg] = useState('');
     const [pixKeyCopied, setPixKeyCopied] = useState(false);
 
-    const [waitingPayment, setWaitingPayment] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState(false);
     
     const numbers = [];
@@ -46,9 +45,6 @@ export default function Layout({ blockedNumbers }){
         );
     }
 
-    function teste(){
-        return alert('teste');
-    }
 
     function selectNumber(number) {
         if(unavailableNumbers.includes(number)) return;
@@ -86,15 +82,14 @@ export default function Layout({ blockedNumbers }){
 
         setPixKey(qrCodeData.pixKey);
         setPixImg(qrCodeData.qrCode);
-        setWaitingPayment(true);
         await fetchAPI(`api/insertNumbers`, data)
-
+        
         setPayment(true);
         setLoading(false);
-
+        
         const checkPayment = setInterval(async () => {
-            console.log(waitingPayment)
-            if (!waitingPayment) return clearInterval(checkPayment);
+            if (!payment) return clearInterval(checkPayment);
+
             const response = await fetchAPI(`api/checkPayment`, {reference: qrCodeData.reference})
             if(response.status == '1') {
                 clearInterval(checkPayment);
@@ -109,7 +104,6 @@ export default function Layout({ blockedNumbers }){
         setPixImg('');
         setShowForm(false);
         setPixKeyCopied(false);
-        setWaitingPayment(false);
         setPaymentStatus(false);
         if (payment) {
             location.reload();
