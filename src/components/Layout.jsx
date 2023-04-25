@@ -7,13 +7,15 @@ export default function Layout({ blockedNumbers }){
     const [unavailableNumbers] = useState(blockedNumbers.numbers);
     const [payedNumbers] = useState(blockedNumbers.payedNumbers)
     
-    const [showForm, setShowForm] = useState(false);
     const [selectedNumbers, setSelectedNumbers] = useState([]);
+
+    const [showForm, setShowForm] = useState(false);
     const [payment, setPayment] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const [pixKey, setPixKey] = useState('');
     const [pixImg, setPixImg] = useState('');
     const [pixKeyCopied, setPixKeyCopied] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const [waitingPayment, setWaitingPayment] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState(false);
