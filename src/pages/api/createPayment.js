@@ -34,13 +34,13 @@ export default async function handler(req, res){
                 {
                     "name": "Números",
                     "quantity": body.numbers.length,
-                    "unit_amount": 10
+                    "unit_amount": 2
                 }
             ],
             "qr_codes": [
                 {
                     "amount": {
-                        "value": (body.numbers.length*10) * 100
+                        "value": (body.numbers.length*2) * 100
                     },
                 }
             ],
