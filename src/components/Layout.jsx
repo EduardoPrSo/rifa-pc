@@ -88,8 +88,9 @@ export default function Layout({ blockedNumbers }){
         setLoading(false);
         
         const checkPayment = setInterval(async () => {
+            console.log('teste')
             const response = await fetchAPI(`api/checkPayment`, {reference: qrCodeData.reference})
-            
+
             if(response.status == '1') {
                 clearInterval(checkPayment);
                 setPaymentStatus(true);
