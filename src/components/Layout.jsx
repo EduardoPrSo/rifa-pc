@@ -6,7 +6,6 @@ import { fetchAPI } from "@/services/fetchAPI";
 export default function Layout({ blockedNumbers }){
     const [unavailableNumbers] = useState(blockedNumbers.numbers);
     const [payedNumbers] = useState(blockedNumbers.payedNumbers)
-    
     const [selectedNumbers, setSelectedNumbers] = useState([]);
 
     const [showForm, setShowForm] = useState(false);
