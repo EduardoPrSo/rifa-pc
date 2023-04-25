@@ -14,7 +14,7 @@ export default function Layout({ blockedNumbers }){
     const [pixImg, setPixImg] = useState('');
     const [pixKeyCopied, setPixKeyCopied] = useState(false);
     const [loading, setLoading] = useState(false);
-
+    
     const numbers = [];
 
     const pcConfig = [
@@ -40,6 +40,10 @@ export default function Layout({ blockedNumbers }){
                 }}>{i}
             </Number>
         );
+    }
+
+    function teste(){
+        return alert('teste');
     }
 
     function selectNumber(number) {
@@ -82,6 +86,15 @@ export default function Layout({ blockedNumbers }){
 
         setPayment(true);
         setLoading(false);
+
+        const checkPayment = setInterval(async () => {
+            const response = await fetchAPI(`api/checkPayment`, {reference: qrCodeData.reference})
+            if(response.status === '1') {
+                clearInterval(checkPayment);
+                alert('Pagamento realizado com sucesso!');
+                closeForm();
+            }
+        }, 10000);
     }
 
     function closeForm() {
