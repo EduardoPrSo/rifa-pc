@@ -14,6 +14,9 @@ export default function Layout({ blockedNumbers }){
     const [pixImg, setPixImg] = useState('');
     const [pixKeyCopied, setPixKeyCopied] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const [waitingPayment, setWaitingPayment] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState(false);
     
     const numbers = [];
 
@@ -86,13 +89,15 @@ export default function Layout({ blockedNumbers }){
 
         setPayment(true);
         setLoading(false);
+        setWaitingPayment(true);
 
         const checkPayment = setInterval(async () => {
+            if (!waitingPayment) return clearInterval(checkPayment);
+
             const response = await fetchAPI(`api/checkPayment`, {reference: qrCodeData.reference})
             if(response.status == '1') {
                 clearInterval(checkPayment);
-                alert('Pagamento realizado com sucesso!');
-                closeForm();
+                setPaymentStatus(true);
             }
         }, 10000);
     }
@@ -103,6 +108,8 @@ export default function Layout({ blockedNumbers }){
         setPixImg('');
         setShowForm(false);
         setPixKeyCopied(false);
+        setWaitingPayment(false);
+        setPaymentStatus(false);
         if (payment) {
             location.reload();
         }
@@ -140,11 +147,20 @@ export default function Layout({ blockedNumbers }){
                 </>
                     : 
                 <>
-                    <h4 className="closeButton" onClick={closeForm}>x</h4>
-                    <h1>Faça seu pagamento!</h1>
-                    <img src={pixImg} />
-                    <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(pixKey);setPixKeyCopied(true)}} readOnly style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>  
-                    <p className="paymentObs">Se o pagamento não for realizado em 10 minutos os números voltam para a lista!</p>  
+                    {!paymentStatus ? 
+                    <>
+                        <h4 className="closeButton" onClick={closeForm}>x</h4>
+                        <h1>Faça seu pagamento!</h1>
+                        <img src={pixImg} />
+                        <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(pixKey);setPixKeyCopied(true)}} readOnly style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>  
+                        <p className="paymentObs">Se o pagamento não for realizado em 10 minutos os números voltam para a lista!</p>  
+                    </>
+                        :
+                    <>
+                        <h4 className="closeButton" onClick={closeForm}>x</h4>
+                        <h1>Pagamento aprovado!</h1>
+                        <h1>Muito obrigado e boa sorte!</h1>
+                    </>}
                 </>}
             </FormContainer>
             <h1>Rifinha do PC</h1>
