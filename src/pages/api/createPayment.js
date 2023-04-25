@@ -34,7 +34,7 @@ export default async function handler(req, res){
                 {
                     "name": "Números",
                     "quantity": body.numbers.length,
-                    "unit_amount": 1
+                    "unit_amount": 2
                 }
             ],
             "qr_codes": [
