@@ -89,7 +89,7 @@ export default function Layout({ blockedNumbers }){
 
         const checkPayment = setInterval(async () => {
             const response = await fetchAPI(`api/checkPayment`, {reference: qrCodeData.reference})
-            if(response.status === '1') {
+            if(response.status == '1') {
                 clearInterval(checkPayment);
                 alert('Pagamento realizado com sucesso!');
                 closeForm();
