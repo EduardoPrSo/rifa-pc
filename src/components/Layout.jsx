@@ -17,6 +17,7 @@ export default function Layout({ blockedNumbers }){
     const [pixKeyCopied, setPixKeyCopied] = useState(false);
 
     const [paymentStatus, setPaymentStatus] = useState(false);
+    const [paymentMessage, setPaymentMessage] = useState(false);
     
     const numbers = [];
 
@@ -87,13 +88,22 @@ export default function Layout({ blockedNumbers }){
         setPayment(true);
         setLoading(false);
         
+        const currentTime = Math.floor(Date.now() / 1000);
+
         const checkPayment = setInterval(async () => {
-            console.log('teste')
+            if (currentTime + 180 < Math.floor(Date.now() / 1000)) {
+                clearInterval(checkPayment);
+                setPaymentStatus(true);
+                setPaymentMessage(false);
+                return;
+            }
             const response = await fetchAPI(`api/checkPayment`, {reference: qrCodeData.reference})
 
             if(response.status == '1') {
                 clearInterval(checkPayment);
                 setPaymentStatus(true);
+                setPaymentMessage(true);
+                return
             }
         }, 10000);
     }
@@ -105,6 +115,7 @@ export default function Layout({ blockedNumbers }){
         setShowForm(false);
         setPixKeyCopied(false);
         setPaymentStatus(false);
+        setPaymentMessage(false);
         if (payment) {
             location.reload();
         }
@@ -148,13 +159,13 @@ export default function Layout({ blockedNumbers }){
                         <h1>Faça seu pagamento!</h1>
                         <img src={pixImg} />
                         <p className="inputPixKey" onClick={()=>{navigator.clipboard.writeText(pixKey);setPixKeyCopied(true)}} readOnly style={copyPixButton}>{!pixKeyCopied ? 'Clique para copiar a chave pix!' : 'Copiado!'}</p>  
-                        <p className="paymentObs">Se o pagamento não for realizado em 10 minutos os números voltam para a lista!</p>  
+                        <p className="paymentObs">Se o pagamento não for realizado em 3 minutos os números voltam para a lista!</p>  
                     </>
                         :
                     <>
                         <h4 className="closeButton" onClick={closeForm}>x</h4>
-                        <h1>Pagamento aprovado!</h1>
-                        <h1>Muito obrigado e boa sorte!</h1>
+                        <h1>{paymentMessage ? 'Pagamento aprovado!' : 'Pagamento cancelado!'}</h1>
+                        <h3>{paymentMessage ? 'Muito obrigado e boa sorte!' : 'Passou o tempo de pagamento!'}</h3>
                     </>}
                 </>}
             </FormContainer>
